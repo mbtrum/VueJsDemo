@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+<body>
+    <h1>Welcome to Vue</h1>
+
+    <p>
+        <a href="index.html">Home</a>
+    </p>
+    
+    <h2>Loading Data From an API</h2>
+
+    <p>This select list is populated from a JSON Api.</p>
+
+    <div id="app">        
+        <select v-model="selected">
+            <option value=""> -- Select --</li>
+            <option v-for="item in programs" v-bind:value="item.programCode">{{ item.programDescription }}</option>
+        </select>
+
+        <p>
+            You selected Program Code: {{ selected }}
+        </p>       
+    </div>
+
+
+    <script>
+        new Vue({
+            el: '#app',
+            data () {                
+                return {  
+                    selected: '',
+                    programs: null
+                }
+            },
+            mounted () {
+                axios
+                .get('https://nscc-inft3075-program-list.azurewebsites.net/api/HttpTrigger1?code=xI1okgD/Rb06W7myuSH8DkkXdvVgOX5IJpCz8kk1V3l9NsyTEhvgRg==')
+                .then(response => (this.programs = response.data))
+            }
+        })
+    </script>
+
+</body>
+</html>
