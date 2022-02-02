@@ -6,7 +6,7 @@
 <body>
 
     <h1>Welcome to Vue</h1>
-    
+
     <p>
         <a href="index.html">Home</a>
     </p>
@@ -14,9 +14,9 @@
     <h2>Forms and Validation</h2>
     
     <div id="form">
-        <p>
+        <span style="color: red;">
             {{ errors }}
-        </p>
+        </span>
 
         <p>
             <label>First Name: </label>
@@ -29,6 +29,17 @@
         </p>
 
         <p>
+            <label>Applicant ID: </label>
+            <input v-model="appid" id="appid" name="appid" type="text">
+        </p>
+
+        <p>
+            <label>Email: </label>
+            <input v-model="email"  id="email" name="email" type="text">
+        </p>
+
+
+        <p>
             <button v-on:click="submit">Submit</button>
         </p>
     </div>
@@ -39,11 +50,13 @@
             data: {
                 firstname: "",
                 lastname: "",
+                appid: "",
+                email: "",
                 errors: ""
             },
             methods: {
                 submit: function (event) {
-                    if (!this.firstname || !this.lastname){
+                    if (!this.firstname || !this.lastname || !this.appid || !this.email){
                         this.errors = 'Please enter a value for all fields'
                     }
                     else{
