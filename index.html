@@ -1,25 +1,108 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <style>.form-group{padding-top:15px;}</style>
         <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     </head>
-    <body>
+<body>
 
-        <h1>Welcome to Vue</h1>
+    <div class="container">
         
-        <p>Below are some example of working with Vue</p>
+        <div id="confirmation" v-if="!isHidden">
+            <h1>Your application has been received.</h1>
+            <p>Thank you for submitting your application, you should have a response within 2 weeks.</p>
+        </div>
+                
+        <div id="form" v-if="!isHidden">
+            <h1>Applicant Form</h1>
 
-        <ul>
-            <li>
-                <a href="lab2.html">Lab #2</a>
-            </li>
-            <li>
-                <a href="forms-example.html">Forms and validation</a>
-            </li>
-            <li>
-                <a href="api-example.html">Pulling data from API</a>
-            </li>
-        </ul>
+            <p  class="text-danger">
+                {{ errors }}
+            </p>
 
-    </body>
+            <div class="form-group">
+                <label for="firstname">First Name</label>
+                <input v-model="firstname" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="lastname">Last Name</label>
+                <input v-model="lastname" class="form-control"> 
+            </div>
+
+            <div class="form-group">
+                <label for="applicantid">Applicant Id</label>
+                <input v-model="applicantid" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input v-model="email" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="selected">Program</label>
+                <select v-model="selected" class="form-control">
+                    <option value=""> -- Select --</li>
+                    <option v-for="item in programs" v-bind:value="item.programCode">{{ item.programDescription }}</option>
+                </select>
+            </div>
+
+            <br />
+            <br />
+            <button v-on:click="submit" class="btn btn-primary">Submit</button>            
+        </div>
+
+    </div>
+
+    <script>
+        var confirmation = new Vue({
+            el: '#confirmation',
+            data: {
+                isHidden: true  
+            }
+        })
+
+        var form = new Vue({
+            el: '#form',
+            data: {
+                firstname: '',
+                lastname: '',
+                applicantid: '',
+                email: '',
+                selected: '',
+                programs: null,
+                errors: '',
+                isHidden: false
+            },
+            methods: {
+                submit: function (event) {
+                    if (!this.firstname || !this.lastname || !this.applicantid || !this.email){
+                        this.errors = 'Please enter a value for all fields'
+                    }
+                    else{
+                        // TO-DO: Post the form data to the API (see Axios Post method)
+
+                        // TO-DO: If Post is successful, display confirmation, else, show an error
+
+                        // Note: here is a good blog for using Axios and POST - https://jasonwatmore.com/post/2020/07/23/vue-axios-http-post-request-examples
+                        
+                        // Show confirmation message (hide the applicant form and display the confirmation)
+                        this.isHidden = true
+                        confirmation.isHidden = false
+                    }                  
+                }                
+            },
+            mounted () {
+                    axios   
+                    .get('https://nscc-inft3075-program-list.azurewebsites.net/api/HttpTrigger1?code=xI1okgD/Rb06W7myuSH8DkkXdvVgOX5IJpCz8kk1V3l9NsyTEhvgRg==')
+                    .then(response => (this.programs = response.data))
+                }
+        })
+
+    </script>
+</body>
 </html>
+
